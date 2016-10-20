@@ -1,5 +1,7 @@
 ﻿using Axinom.ClearKeyServer.Model;
+using Microsoft.ApplicationInsights;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
@@ -7,6 +9,8 @@ namespace Axinom.ClearKeyServer.Controllers
 {
 	public sealed class AcquireLicenseController : ApiController
 	{
+		private static readonly TelemetryClient _telemetry = new TelemetryClient();
+
 		[HttpPost]
 		public LicenseResponse Post([FromBody] LicenseRequest request)
 		{
@@ -14,6 +18,14 @@ namespace Axinom.ClearKeyServer.Controllers
 				throw new ArgumentNullException(nameof(request));
 
 			request.Validate();
+
+			_telemetry.TrackEvent("LicenseRequest", new Dictionary<string, string>
+			{
+				{ "KeySessionType", request.SessionType }
+			}, new Dictionary<string, double>
+			{
+				{ "RequestedKeyCount", request.KeyIdsAsBase64Url.Length }
+			});
 
 			return new LicenseResponse
 			{

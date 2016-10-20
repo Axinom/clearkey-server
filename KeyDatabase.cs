@@ -1,4 +1,5 @@
 ﻿using Axinom.Cpix;
+using Microsoft.ApplicationInsights;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,21 +25,30 @@ namespace Axinom.ClearKeyServer
 			var keys = new Dictionary<Guid, byte[]>();
 			Keys = keys;
 
+			var telemetry = new TelemetryClient();
+
 			var appDataPath = HttpContext.Current.Server.MapPath("~/App_Data");
 
-			if (!Directory.Exists(appDataPath))
-				return; // Nothing to load, no data exists!
+			telemetry.TrackTrace("Looking for keys in " + appDataPath);
 
-			foreach (var cpixFilePath in Directory.GetFiles(appDataPath, "*.xml"))
+			if (Directory.Exists(appDataPath))
 			{
-				var document = CpixDocument.Load(cpixFilePath);
+				foreach (var cpixFilePath in Directory.GetFiles(appDataPath, "*.xml"))
+				{
+					var document = CpixDocument.Load(cpixFilePath);
 
-				if (!document.ContentKeysAreReadable)
-					continue;
+					if (!document.ContentKeysAreReadable)
+						continue;
 
-				foreach (var key in document.ContentKeys)
-					keys[key.Id] = key.Value;
+					foreach (var key in document.ContentKeys)
+						keys[key.Id] = key.Value;
+				}
 			}
+
+			telemetry.TrackEvent("KeyDatabaseLoaded", null, new Dictionary<string, double>
+			{
+				{ "KeyCount", keys.Count }
+			});
 		}
 	}
 }

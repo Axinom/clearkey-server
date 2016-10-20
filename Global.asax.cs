@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.ApplicationInsights.Extensibility;
+using System;
+using System.Web.Configuration;
 using System.Web.Http;
 
 namespace Axinom.ClearKeyServer
@@ -7,6 +9,10 @@ namespace Axinom.ClearKeyServer
 	{
 		protected void Application_Start(object sender, EventArgs e)
 		{
+			// Enable Application Insights if configured.
+			if (!string.IsNullOrWhiteSpace(WebConfigurationManager.AppSettings["InstrumentationKey"]))
+				TelemetryConfiguration.Active.InstrumentationKey = WebConfigurationManager.AppSettings["InstrumentationKey"];
+
 			var configuration = GlobalConfiguration.Configuration;
 
 			// JSON only!

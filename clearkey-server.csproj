@@ -99,7 +99,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AcquireLicenseController.cs" />
     <Compile Include="Controllers\DiagnosticsController.cs" />
-    <Compile Include="Controllers\ExtensionsForGuid.cs" />
+    <Compile Include="ExtensionsForGuid.cs" />
     <Compile Include="GuidHelpers.cs" />
     <Compile Include="ConvertHelpers.cs" />
     <Compile Include="Global.asax.cs">

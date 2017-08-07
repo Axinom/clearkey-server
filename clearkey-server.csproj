@@ -128,6 +128,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BadRequestException.cs" />
     <Compile Include="Controllers\AcquireLicenseController.cs" />
     <Compile Include="Controllers\DiagnosticsController.cs" />
     <Compile Include="ExtensionsForGuid.cs" />
@@ -141,6 +142,9 @@
     <Compile Include="Model\LicenseRequest.cs" />
     <Compile Include="Model\LicenseResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportingExceptionFilterAttribute.cs" />
+    <Compile Include="ReportingExceptionHandler.cs" />
+    <Compile Include="UserFriendlyExceptionsFilterAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\.gitignore" />
